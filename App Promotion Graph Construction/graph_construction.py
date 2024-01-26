@@ -4,7 +4,7 @@ import ast
 # Load the CSV file
 
 def get_links_nodes():
-    file_path = '../data/R5CT90DQDVR_2023.12.31-22.18.49_dfs_greedy-random.csv'
+    file_path = '../data/R5CT90DQDVR_2023.12.31-22.18.49_dfs_greedy.csv' # replace this with the output of droidbot
     df = pd.read_csv(file_path)
 
     # Convert string representation of list in 'ad' column to actual list

@@ -16,8 +16,7 @@ def IDMDownload(df):
 
 if __name__=='__main__':
 
-    df=pd.read_csv('<apk index file>') # Only the SHA of apks are required
-    # df.columns=['pkg_name','sha256','path']
+    df=pd.read_csv('data/apk_index.csv') # Only the SHA of apks are required, replace it with the Full List of AndroZoo dataset when you need to reproduce our work
     IDMDownload(df)
 
 
