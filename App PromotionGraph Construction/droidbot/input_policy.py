@@ -10,7 +10,7 @@ from .input_event import ScrollEvent
 import subprocess
 import copy
 import os
-from query_lmql import  prompt_llm_with_history_simplified,prompt_llm_ad_detection
+# from query_lmql import  prompt_llm_with_history_simplified,prompt_llm_ad_detection
 import tools
 # Max number of restarts
 MAX_NUM_RESTARTS = 5
@@ -1138,51 +1138,51 @@ class UtgAdGreedySearchPolicy(UtgBasedInputPolicy):
             view_desc = view_desc.replace(" class='&'", "")
         return view_desc
 
-    def _get_action_from_views_actions(self, action_history, thought_history, views=None, candidate_actions=None,
-                                       state_strs=None, current_state=None):
-        '''
-        get action choice from LLM based on a list of views and corresponding actions
-        '''
-        if current_state:
-            state_prompt, candidate_actions, _, _ = current_state.get_described_actions()
-            state_str = current_state.state_str
-            history, ui_desc = self._make_prompt_lmql(state_prompt, action_history, is_text=False, state_str=state_str,
-                                                      thought_history=thought_history)
-        else:
-            views_with_id = []
-            for id in range(len(views)):
-                views_with_id.append(tools.insert_id_into_view(views[id], id))
-            state_prompt = '\n'.join(views_with_id)
-            state_str = tools.hash_string(state_prompt)
-            history, ui_desc = self._make_prompt_lmql(state_prompt, action_history, is_text=False, state_str=state_str,
-                                                      thought_history=thought_history)
-
-        ids = [str(idx) for idx, i in enumerate(candidate_actions)]
-        ids.append('N/A')
-        idx = prompt_llm_ad_detection(history=history, ui_desc=ui_desc, ids=ids)
-        # idx, action_type, input_text =prompt_llm_with_history(history=history,ui_desc=ui_desc,ids=ids)
-        # print(idx, action_type, input_text)
-        # file_name = self.device.output_dir +'/'+ self.task.replace('"', '_').replace("'", '_') + '.yaml' #str(str(time.time()).replace('.', ''))
-        # idx, action_type, input_text = tools.extract_action(response)
-        if idx=='N/A':
-            return idx,'','',''
-        idx = int(idx)
-        selected_action = candidate_actions[idx]
-
-        selected_view_description = tools.get_item_properties_from_id(ui_state_desc=state_prompt, view_id=idx)
-        thought = ''  # tools.get_thought(response)
-
-        # if isinstance(selected_action, SetTextEvent):
-        #     if input_text != "N/A" and input_text != None:
-        #         selected_action.text = input_text.replace('"', '').replace(' ', '-')
-        #         if len(selected_action.text) > 30:  # heuristically disable long text input
-        #             selected_action.text = ''
-        #     else:
-        #         selected_action.text = ''
-        #     self._save2yaml(file_name, state_prompt, idx, state_strs, inputs=selected_action.text)
-        # else:
-        #     self._save2yaml(file_name, state_prompt, idx, state_strs, inputs='null')
-        return selected_action, candidate_actions, selected_view_description, thought
+    # def _get_action_from_views_actions(self, action_history, thought_history, views=None, candidate_actions=None,
+    #                                    state_strs=None, current_state=None):
+    #     '''
+    #     get action choice from LLM based on a list of views and corresponding actions
+    #     '''
+    #     if current_state:
+    #         state_prompt, candidate_actions, _, _ = current_state.get_described_actions()
+    #         state_str = current_state.state_str
+    #         history, ui_desc = self._make_prompt_lmql(state_prompt, action_history, is_text=False, state_str=state_str,
+    #                                                   thought_history=thought_history)
+    #     else:
+    #         views_with_id = []
+    #         for id in range(len(views)):
+    #             views_with_id.append(tools.insert_id_into_view(views[id], id))
+    #         state_prompt = '\n'.join(views_with_id)
+    #         state_str = tools.hash_string(state_prompt)
+    #         history, ui_desc = self._make_prompt_lmql(state_prompt, action_history, is_text=False, state_str=state_str,
+    #                                                   thought_history=thought_history)
+    #
+    #     ids = [str(idx) for idx, i in enumerate(candidate_actions)]
+    #     ids.append('N/A')
+    #     idx = prompt_llm_ad_detection(history=history, ui_desc=ui_desc, ids=ids)
+    #     # idx, action_type, input_text =prompt_llm_with_history(history=history,ui_desc=ui_desc,ids=ids)
+    #     # print(idx, action_type, input_text)
+    #     # file_name = self.device.output_dir +'/'+ self.task.replace('"', '_').replace("'", '_') + '.yaml' #str(str(time.time()).replace('.', ''))
+    #     # idx, action_type, input_text = tools.extract_action(response)
+    #     if idx=='N/A':
+    #         return idx,'','',''
+    #     idx = int(idx)
+    #     selected_action = candidate_actions[idx]
+    #
+    #     selected_view_description = tools.get_item_properties_from_id(ui_state_desc=state_prompt, view_id=idx)
+    #     thought = ''  # tools.get_thought(response)
+    #
+    #     # if isinstance(selected_action, SetTextEvent):
+    #     #     if input_text != "N/A" and input_text != None:
+    #     #         selected_action.text = input_text.replace('"', '').replace(' ', '-')
+    #     #         if len(selected_action.text) > 30:  # heuristically disable long text input
+    #     #             selected_action.text = ''
+    #     #     else:
+    #     #         selected_action.text = ''
+    #     #     self._save2yaml(file_name, state_prompt, idx, state_strs, inputs=selected_action.text)
+    #     # else:
+    #     #     self._save2yaml(file_name, state_prompt, idx, state_strs, inputs='null')
+    #     return selected_action, candidate_actions, selected_view_description, thought
 
     def _insert_predictions_into_state_prompt(self, state_prompt, current_state_item_descriptions):
         state_prompt_list = state_prompt.split('>\n')

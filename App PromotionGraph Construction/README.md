@@ -21,12 +21,17 @@ To perform AdGPE's UI exploration on a given APK, run this script
 python droidad.py -d <serial_number> -i <input_apk_dir> -p <policy_name>
 ```
 - **<serial_number>** is the serial number of your phone, which is connected with the computer and Developer Options is already set.
-- **<input_apk_dir>** is the folder where you put the APK files that need to be explored. Two example apks are provided under the `data` folder
+- **<input_apk_dir>** is the folder where you put the APK files that need to be explored. 
 - To run AdGPE, **<policy_name>** should be 'dfs_greedy'.
 - - 'bfs_greedy' is AdGPE(bfs)
 - - 'bfs' or 'dfs' is Droidbot
 - - 'ad_bfs' or 'ad_dfs' is the Large Language Model assisted exploration, which is under developing
 
+Two example apks are provided under the `data` folder
+You can run a demo
+```shell
+python droidad.py -i data -p bfs_greedy
+```
 After running this command, the output logs will be generated under the directory `output_dir`.
 The exploration results will be save into `data` folder.
 
